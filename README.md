@@ -1,6 +1,6 @@
 # ARNPROXY SDK for Node.js
 
-Version **1.1.0** · MIT · Node.js 20+ (server-side ESM).
+Version **1.1.1** · MIT · Node.js 20+ (server-side ESM).
 
 Source client for https://www.arnproxy.com/account/api/v1/ . Covers all **77 documented resources** through a generic request method, plus account/capabilities convenience methods and webhook HMAC verification. This client is for ARNPROXY, not a direct connection to an upstream provider.
 
@@ -45,3 +45,5 @@ MIT, copyright 2026 ARNPROXY. The license covers this SDK only, not the hosted p
 `npm test`
 
 Uses synthetic fixtures and mocked transports only. No real API key or hosted API call is required. GitHub Actions runs this check on pushes and pull requests.
+
+Public synthetic test-key recipes are documented in [TESTING.md](TESTING.md). Never use them with a live service.

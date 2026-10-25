@@ -1,4 +1,4 @@
-/** ARNPROXY thin client 1.1.0. Server-side Node.js only; never embed your key in browser code. */
+/** ARNPROXY thin client 1.1.1. Server-side Node.js only; never embed your key in browser code. */
 import https from 'node:https';
 import { readFileSync } from 'node:fs';
 import { createHmac, timingSafeEqual } from 'node:crypto';
@@ -38,7 +38,7 @@ export class Client {
     const write = spec.write;
     if (write && this.allow_writes !== true) throw new ArnproxyError('WRITES_DISABLED');
     if (spec.provider_read && this.allow_provider_reads !== true) throw new ArnproxyError('PROVIDER_READS_DISABLED');
-    const headers = { Authorization: 'Bearer ' + this.#key, Accept: 'application/json', 'User-Agent': 'ARNPROXY-Node/1.1.0' };
+    const headers = { Authorization: 'Bearer ' + this.#key, Accept: 'application/json', 'User-Agent': 'ARNPROXY-Node/1.1.1' };
     if (spec.idempotency) {
       if (typeof operation_key !== 'string' || !/^[A-Za-z0-9_-]{16,100}$/.test(operation_key)) throw new ArnproxyError('OPERATION_KEY_REQUIRED');
       headers['Idempotency-Key'] = operation_key;

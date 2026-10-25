@@ -5,6 +5,14 @@ import {EventEmitter} from 'node:events';
 import {pathToFileURL} from 'node:url';
 import path from 'node:path';
 const root=process.argv[2],f=JSON.parse(fs.readFileSync(process.argv[3])),{Client,ArnproxyError,verifyWebhook}=await import(pathToFileURL(path.join(root,'node/arnproxy.mjs'))),resources=JSON.parse(fs.readFileSync(path.join(root,'resources.json'))).resources;let checks=0;
+// Deliberately public synthetic bytes; never a production signing secret.
+for(const vector of f.vectors){
+ if(vector.secret_fixture!==undefined){
+  assert(['repeat_X_32','repeat_Y_32'].includes(vector.secret_fixture));
+  vector.secret='whsec_'+Buffer.alloc(32,vector.secret_fixture==='repeat_X_32'?88:89).toString('base64');
+ }
+}
+
 const ck=v=>{assert(v);checks++;},error=async(call,code)=>{try{await call();assert.fail('Expected '+code);}catch(e){assert(e instanceof ArnproxyError);ck(e.code===code);ck(!e.message.includes(f.key));return e;}};
 class Mock extends Client{calls=[];status=200;responseHeaders={};raw=Buffer.from(JSON.stringify(f.body));failure=false;async _send(...args){this.calls.push(args);if(this.failure)throw Error('sensitive '+f.key);return{status:this.status,headers:this.responseHeaders,body:this.raw};}}
 const c=new Mock(f.key,{allow_writes:true,allow_provider_reads:true});
